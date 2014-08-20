@@ -1,0 +1,38 @@
+{
+  "name": "keyboard",
+  "version": "1.0.0",
+  "homepage": "https://github.com/SonoIo/keyboard",
+  "authors": [
+    "Matteo Baggio"
+  ],
+  "description": "Javascript keyboard event handler with accelerators and layers",
+  "main": "lib/keyboard.js",
+  "keywords": [
+    "Backbone",
+    "jQuery",
+    "Underscore",
+    "Keyboard"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "underscore": "~1.6.0"
+  },
+  "_release": "1.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.0.0",
+    "commit": "831c07c034b1767316845ccf4bcd2bae6192bb62"
+  },
+  "_source": "git://github.com/SonoIo/keyboard.git",
+  "_target": "~1.0.0",
+  "_originalSource": "keyboard.js",
+  "_direct": true
+}

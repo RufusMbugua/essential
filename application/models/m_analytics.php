@@ -2218,6 +2218,27 @@ ORDER BY lastActivity DESC";
         }
         return $this->districtName;
     }
+    function getAllDistrictNames() {
+        
+        /*using DQL*/
+        try {
+            $query = $this->em->createQuery('SELECT DISTINCT(f.facDistrict) FROM  models\Entities\Facilities f ORDER BY f.facDistrict ASC');
+           
+            $this->districtName = $query->getResult();
+            
+            //die(var_dump($this->districtName));
+            
+            
+        }
+        catch(exception $ex) {
+            
+            //ignore
+            //$ex->getMessage();
+            
+            
+        }
+        return $this->districtName;
+    }
     
     /*end of getSpecificDistrictNames*/
     

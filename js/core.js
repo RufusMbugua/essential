@@ -12,7 +12,7 @@
  * @param  {[type]} color_scheme     [description]
  * @return {[type]}                  [description]
  */
-function runGraph(container, chart_title, chart_stacking, chart_type, chart_categories, chart_series, chart_drilldown, chart_length, chart_width, chart_margin, color_scheme,chart_label_rotation,chart_legend_floating) {
+function runGraph(container, chart_title, chart_stacking, chart_type, chart_categories, chart_series, chart_drilldown, chart_length, chart_width, chart_margin, color_scheme, chart_label_rotation, chart_legend_floating) {
     file_name = container.replace('#', '');
     file_name = file_name.replace('_', ' ');
     $('#' + container).highcharts({
@@ -41,7 +41,7 @@ function runGraph(container, chart_title, chart_stacking, chart_type, chart_cate
         xAxis: {
             categories: chart_categories,
             labels: {
-                rotation:chart_label_rotation
+                rotation: chart_label_rotation
             }
         },
         yAxis: {
@@ -157,7 +157,7 @@ function loadGraph(base_url, function_url, graph_section) {
             $(graph_section).empty();
             if (obj.chart_series != null && obj.chart_series[0] != null) {
                 $(graph_section).append('<div id="' + obj.container + '" ></div>');
-                runGraph(obj.container, obj.chart_title, obj.chart_stacking, obj.chart_type, obj.chart_categories, obj.chart_series, obj.chart_drilldown, obj.chart_length, obj.chart_width, obj.chart_margin, obj.color_scheme,obj.chart_label_rotation,obj.chart_legend_floating);
+                runGraph(obj.container, obj.chart_title, obj.chart_stacking, obj.chart_type, obj.chart_categories, obj.chart_series, obj.chart_drilldown, obj.chart_length, obj.chart_width, obj.chart_margin, obj.color_scheme, obj.chart_label_rotation, obj.chart_legend_floating);
             } else {
                 $(graph_section).append('<div class="null_message"><i class="fa fa-exclamation-triangle"></i>No Data Found</div>');
             }
@@ -312,23 +312,22 @@ function getCountyData(base_url, county, survey_type, survey_category) {
             county = encodeURIComponent(county);
             url = base_url + 'c_analytics/setActive/' + county + '/' + survey_type + '/' + survey_category;
             $('#load_analytics').attr('data-url', url);
-            new_url = base_url + 'c_analytics/getCountyReportingSummary/'+county + '/'+survey + '/' + survey_category;
-            $('#load_county_summary').attr('data-url',new_url);
+            new_url = base_url + 'c_analytics/getCountyReportingSummary/' + county + '/' + survey + '/' + survey_category;
+            $('#load_county_summary').attr('data-url', new_url);
         }
     });
 }
 
 
-function loadData(base_url,function_url,value,container,placeholder_text){
-    if(value!==''){
-       ajax_url= base_url + 'c_analytics/' + function_url + '/' + value
-    }
-    else{
-        ajax_url= base_url + 'c_analytics/' + function_url
+function loadData(base_url, function_url, value, container, placeholder_text) {
+    if (value !== '') {
+        ajax_url = base_url + 'c_analytics/' + function_url + '/' + value
+    } else {
+        ajax_url = base_url + 'c_analytics/' + function_url
     }
     $.ajax({
-        url: ajax_url ,
-        async:false,
+        url: ajax_url,
+        async: false,
         beforeSend: function(xhr) {
             xhr.overrideMimeType("text/plain; charset=x-user-defined");
 
@@ -336,16 +335,20 @@ function loadData(base_url,function_url,value,container,placeholder_text){
         },
         success: function(data) {
             obj = jQuery.parseJSON(data);
-            $(container).select2({ placeholder:placeholder_text, data: obj});
+            $(container).select2({
+                placeholder: placeholder_text,
+                data: obj
+            });
 
         }
     });
 }
 
-function loadMasterFacilityList(base_url,container){
+function loadMasterFacilityList(base_url, container, form) {
+    var county_data, district_data;
     $.ajax({
-        url: base_url+'c_analytics/getMasterFacilityList' ,
-        async:false,
+        url: base_url + 'c_analytics/getMasterFacilityList/' + form,
+        async: false,
         beforeSend: function(xhr) {
             xhr.overrideMimeType("text/plain; charset=x-user-defined");
 
@@ -354,15 +357,101 @@ function loadMasterFacilityList(base_url,container){
         success: function(data) {
             $(container.empty);
             $(container).append(data);
-            $(container).delay(2000,function(nxt){
+            $(container).delay(2000, function(nxt) {
                 $('.editable').editable({
-                    url:base_url+'c_analytics/edit_facility_info'
+                    url: base_url + 'c_analytics/edit_facility_info'
                 });
-nxt();
+
+                $.ajax({
+                    url: base_url + 'assets/data/fac_county.json',
+                    async: false,
+                    success: function(data) {
+                        obj = jQuery.parseJSON(data);
+                        county_data = obj;
+
+                    }
+                });
+                $.ajax({
+                    url: base_url + 'assets/data/fac_district.json',
+                    async: false,
+                    success: function(data) {
+                        obj = jQuery.parseJSON(data);
+                        district_data = obj;
+
+                    }
+                });
+
+
+                console.log(district_data);
+
+                // console.log(file_url);
+
+                $('.fac_county').editable({
+                    url: base_url + 'c_analytics/edit_facility_info',
+                    select2: {
+                        placeholder: 'Select an Option',
+                        allowClear: true,
+                        width: '130px',
+                        data: county_data
+                    },
+                    display: function (value)
+{
+    var html='';
+    if(!value){
+        $(this).empty();
+        return;
+    }
+    if($.isArray(value)){
+        if(!value.length){
+            $(this).empty();
+            return;
+        }
+        $(value).each(function(i,e){
+            var match = jQuery.grep(data, function( o ){ return ( o.id == e ); });
+            if(match[0]){
+                html += match[0].text;
+                if(i+1 < value.length) html+=",";
+            }
+        });
+    }else{
+        var match = jQuery.grep(data, function( o ){ return ( o.id == value ); });
+        if(!match[0]) return;
+        html = match[0].text;
+    }
+    $(this).html(html);
+}
+                });
+                $('.fac_district').editable({
+                    url: base_url + 'c_analytics/edit_facility_info',
+                    select2: {
+                        placeholder: 'Select an Option',
+                        allowClear: true,
+                        width: '130px',
+                        data: district_data
+                    },
+                    formatResult: function(result) {
+                        return result.text
+                    },
+                    formatSelection: function(selection) {
+                        return selection.text
+                    }
+                });
+
+                nxt();
             });
         }
     });
 }
+
+function showMasterFacilityList(form) {
+    $('#masterFacilityList').modal('show');
+    $('#masterFacilityList').delay(2000, function(nxt) {
+        loadMasterFacilityList(base_url, '#masterFacilityList .modal-body', form);
+        $('.dataTable').dataTable();
+        nxt();
+    });
+}
+
 function startIntro() {
     var intro = introJs();
     intro.setOptions({
@@ -407,16 +496,16 @@ $(document).ready(function() {
         //$(this).collapse('show');
 
     })
-    // $('.dataTable').on('load',function(){
-    //     $('.dataTable').dataTable({
-    //             "sPaginationType": "full_numbers"
-    //         });
-    //     });
-$.fn.editable.defaults.mode = 'inline';
-$.fn.editableform.buttons = 
-  '<button type="submit" class="btn btn-success editable-submit btn-mini"><i class="fa fa-check-circle"></i></button>' +
- '<button type="button" class="btn btn-danger editable-cancel btn-mini"><i class="fa fa-ban"></i></button>'; 
+    $('.dataTable').on('load', function() {
+        $('.dataTable').dataTable({
+            "sPaginationType": "full_numbers"
+        });
+    });
+    $.fn.editable.defaults.mode = 'inline';
+    $.fn.editableform.buttons =
+        '<button type="submit" class="btn btn-success editable-submit btn-mini"><i class="fa fa-check-circle"></i></button>' +
+        '<button type="button" class="btn btn-danger editable-cancel btn-mini"><i class="fa fa-ban"></i></button>';
 
-    
+
 
 });

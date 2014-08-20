@@ -3,10 +3,6 @@ $mfName = $this -> session -> userdata('fName');
 $mfacilityMFL = $this -> session -> userdata('facilityMFL');
 ?>
 
-<script src="<?php echo base_url()?>js/js_libraries.js"></script>
-<script type="text/javascript" src="<?php echo base_url()?>js/style-table.js"></script>
-<script src="<?php echo base_url()?>js/core.js"></script>
-
 <script>
     $().ready(function(){
         /**

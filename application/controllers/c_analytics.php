@@ -2361,6 +2361,15 @@ ORDER BY fac_level;");
         }
         echo json_encode($data);
     }
+    public function getDistrictNamesAllJSON() {
+        $county = urldecode($county);
+        $options = '';
+        $results = $this->m_analytics->getAllDistrictNames();
+        foreach ($results as $result) {
+            $data[] = array('id' => ucwords($result['facDistrict']), 'text' => ucwords($result['facDistrict']));
+        }
+        echo json_encode($data);
+    }
     
     public function getCountyNamesJSON() {
         $county = urldecode($county);
@@ -2370,6 +2379,12 @@ ORDER BY fac_level;");
             $data[] = array('id' => ucwords($result['county']), 'text' => ucwords($result['county']));
         }
         echo json_encode($data);
+    }
+    public function get_fac_county() {
+        $this->getCountyNamesJSON();
+    }
+    public function get_fac_district() {
+        $this->getDistrictNamesAllJSON();
     }
     public function edit_facility_info($table, $primary_key) {
         $table = 'facilities';
@@ -2381,16 +2396,17 @@ ORDER BY fac_level;");
         //echo '<pre>';print_r($this->input->post());echo '</pre>';
         $this->m_analytics->universalEditor($table, $column, $value, $primary_key, $pk_value);
     }
-    public function getMasterFacilityList() {
+    public function getMasterFacilityList($form) {
         $this->db->select('fac_id,fac_name,fac_level,fac_ownership,fac_county,fac_district')->from('facilities')->order_by('fac_county ASC')->order_by('fac_district ASC');
         
         $results = $this->db->get();
         
-        $data = $this->generateData($results->result_array(), 'Master List', 'table');
+        $data = $this->generateData($results->result_array(), 'Master List', $form);
         
         echo $data;
         
         //die;
+        
         
     }
     

@@ -184,6 +184,9 @@ class MY_Controller extends CI_Controller
         
         $this->getTreatments();
         $this->getSections();
+        $this->write_facilities();
+$this->write_districts();
+$this->write_counties();
     }
     
     function getRepositoryByFormName($form) {
@@ -4690,11 +4693,15 @@ GROUP BY st_name,sc_name,facilityCode;";
         foreach ($data as $key => $columns) {
             $row = array();
             foreach ($columns as $column => $value) {
-
+                
                 if ($column != $primary_key) {
                     switch ($editable) {
                         case 'editable':
-                            $row[] = '<a id="' . $column . '_' . $counter . '" data-type="text" data-name="'.$column.'" data-pk="'.$columns[$primary_key].'" class="editable">' . $value . '</a>';
+                            if ($column == 'fac_county' || $column == 'fac_district') {
+                                $row[] = '<a id="' . $column . '_' . $counter . '" data-type="select2" class="'.$column.'" data-name="' . $column . '" data-pk="' . $columns[$primary_key] . '">' . $value . '</a>';
+                            } else {
+                                $row[] = '<a id="' . $column . '_' . $counter . '" data-type="text" data-name="' . $column . '" data-pk="' . $columns[$primary_key] . '" class="editable">' . $value . '</a>';
+                            }
                             break;
 
                         default:
@@ -4710,5 +4717,45 @@ GROUP BY st_name,sc_name,facilityCode;";
         }
         $generated_table = $this->table->generate();
         return $generated_table;
+    }
+    public function write_facilities() {
+        
+        $facility = $this->db->get('facilities');
+        $facility = $facility->result_array();
+        
+        foreach ($facility as $fac) {
+            $facArray[] = array('id' => $fac['fac_name'],'text' => $fac['fac_name']);
+        }
+        $data = json_encode($facArray);
+        
+        write_file('assets/data/fac_name.json', $data);
+        //echo 'written!';
+    }
+
+    public function write_districts() {
+        
+        $facility = $this->db->get('districts');
+        $facility = $facility->result_array();
+        
+        foreach ($facility as $fac) {
+            $facArray[] = array('id' => $fac['district_name'],'text' => $fac['district_name']);
+        }
+        $data = json_encode($facArray);
+        write_file('assets/data/fac_district.json', $data);
+        //echo 'written!';
+    }
+
+    public function write_counties() {
+        
+        $facility = $this->db->get('counties');
+        $facility = $facility->result_array();
+        
+        foreach ($facility as $fac) {
+            $facArray[] = array('id' => $fac['county_name'],'text' => $fac['county_name']);
+        }
+        $data = json_encode($facArray);
+        
+        write_file('assets/data/fac_county.json', $data);
+        //echo 'written!';
     }
 }
