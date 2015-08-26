@@ -64,7 +64,7 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
-$db['essential-public']['hostname'] = '41.89.6.231';
+$db['essential-public']['hostname'] = '192.168.133.31';
 $db['essential-public']['username'] = 'essential';
 $db['essential-public']['password'] = 'mnch';
 $db['essential-public']['database'] = 'mnh_rest';
