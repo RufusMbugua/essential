@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">  <!-- Force Latest IE rendering engine -->
 
 <meta name="description" content="<?php echo $application_description; ?>">
-<meta name="keywords" content="<?php echo implode(', ', $application_keywords); ?>">
+<!-- <meta name="keywords" content="<?php echo implode(', ', $application_keywords); ?>"> -->
 <meta name="author" content="<?php echo $application_authors; ?>">
 
 <link rel="shortcut icon"  href="<?php echo base_url(); ?>assets/images/favicon.ico">
