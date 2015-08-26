@@ -45,7 +45,7 @@
 | the active record class
 */
 
-$active_group = 'default';
+$active_group = 'essential-public';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
@@ -64,6 +64,20 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
-
+$db['essential-public']['hostname'] = '41.89.6.231';
+$db['essential-public']['username'] = 'essential';
+$db['essential-public']['password'] = 'mnch';
+$db['essential-public']['database'] = 'mnh_rest';
+$db['essential-public']['dbdriver'] = 'mysqli';
+$db['essential-public']['dbprefix'] = '';
+$db['essential-public']['pconnect'] = TRUE;
+$db['essential-public']['db_debug'] = TRUE;
+$db['essential-public']['cache_on'] = FALSE;
+$db['essential-public']['cachedir'] = '';
+$db['essential-public']['char_set'] = 'utf8';
+$db['essential-public']['dbcollat'] = 'utf8_general_ci';
+$db['essential-public']['swap_pre'] = '';
+$db['essential-public']['autoinit'] = TRUE;
+$db['essential-public']['stricton'] = FALSE;
 /* End of file database.php */
 /* Location: ./application/config/database.php */
